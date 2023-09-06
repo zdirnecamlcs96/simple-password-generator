@@ -6,15 +6,15 @@ use rand::seq::SliceRandom;
 fn main() {
     let password = generate_password();
 
-    println!("{}", password);
+    println!("\nNew Password: {}", password);
 }
 
 fn generate_words() -> Vec<String> {
     // Open the file for reading
-    let file1 = File::open("../data/adjectives.txt").unwrap();
+    let file1 = File::open("./data/adjectives.txt").unwrap();
     let reader1 = io::BufReader::new(file1);
 
-    let file2 = File::open("../data/nouns.txt").unwrap();
+    let file2 = File::open("./data/nouns.txt").unwrap();
     let reader2 = io::BufReader::new(file2);
 
     // Init a empty list of string
@@ -33,7 +33,7 @@ fn generate_words() -> Vec<String> {
 
     lines.shuffle(&mut rng);
 
-    let mut words: Vec<String> = lines.into_iter().take(4).collect();
+    let words: Vec<String> = lines.into_iter().take(4).collect();
 
     words
 
@@ -52,9 +52,18 @@ fn generate_password() -> String{
 
     let mut password = String::new();
 
-    for word in words {
-        println!("{}", &word);
+    print!("Secret Words: ");
+
+    for (i, word) in words.iter().enumerate() {
+        print!("{}", &word);
+
         password.push_str(shuffle_string(word.as_str()).as_str());
+
+        // add dash if the word is not the first word or the last word
+        if i != words.len()- 1{
+            print!("|");
+            password.push('-');
+        }
     }
 
     let mut rng = rand::thread_rng();
